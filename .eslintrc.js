@@ -26,6 +26,7 @@ module.exports = {
     'indent':0,
     'no-tabs':0,
     'spaced-comment':0,
-    "no-trailing-spaces": 1
+    "no-trailing-spaces": 1,
+    "no-unused-vars": 0
   }
 }

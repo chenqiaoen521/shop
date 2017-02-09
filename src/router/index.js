@@ -23,5 +23,6 @@ export default new VueRouter({
       name: 'Seller',
       component: Seller
     }
-  ]
+  ],
+	linkActiveClass: 'active'
 })
