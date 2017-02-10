@@ -26,7 +26,14 @@
 		<div class="header-background">
 			<img :src="seller.avatar" alt="seller.avatar" width="100%" height="100%">
 		</div>
-		<div class="detail" v-show="detailShow"></div>
+		<div class="detail" v-show="detailShow">
+			<div class="detail-wrapper clearfix">
+				<div class="detail-main"></div>
+			</div>
+			<div class="detail-close">
+				<i class="icon-close"></i>
+			</div>
+		</div>
 	</div>
 </template>
 <script type="text/ecmascript-6">
@@ -173,4 +180,16 @@ export default {
 	z-index:1
 	background-color:rgba(7,17,27,.8)
 	top:0
+	.detail-wrapper
+		min-heihgt:100%
+		.detail-main
+			margin-top:64px
+			padding-bottom:64px
+	.detail-close
+		position:relative
+		width:32px
+		height:32px
+		margin:-64px auto 0 auto
+		clear:both
+		font-size:32px
 </style>
