@@ -2,12 +2,12 @@
 	<div class="header">
 		<div class="content-wrapper">
 			<div class="avater">
-				<img :src="seller.avatar" width="64" height="64" alt="seller.avatar">
+				<img :src="seller.avatar" @click="detailShow=true" width="64" height="64" alt="seller.avatar">
 			</div>
 			<div class="content">
 				<div class="title">
 					<span class="brand"></span>
-					<span class="name">{{seller.name}}</span>
+					<span class="name" @click="detailShow=true">{{seller.name}}</span>
 				</div>
 				<div class="description">{{seller.description}}/{{seller.deliveryTime}}</div>
 				<div v-if="seller.supports" class="support">
@@ -20,8 +20,13 @@
 				<i class="icon-keyboard_arrow_right"></i>
 			</div>
 		</div>
-		
-		<div  v-if="seller.infos" class="bulletin-wrapper">{{seller.infos.join('')}}</div>
+		<div class="bulletin-wrapper">
+			<span class="bulletin-title"></span><span v-if="seller.infos" class="bulletin-text">{{seller.infos.join('')}}</span><i class="icon-keyboard_arrow_right"></i>
+		</div>
+		<div class="header-background">
+			<img :src="seller.avatar" alt="seller.avatar" width="100%" height="100%">
+		</div>
+		<div class="detail" v-show="detailShow"></div>
 	</div>
 </template>
 <script type="text/ecmascript-6">
@@ -30,7 +35,8 @@ export default {
 	data () {
 		return {
 			seller: {},
-			classMap: []
+			classMap: [],
+			detailShow: false
 		}
 	},
 	mounted: function () {
@@ -52,7 +58,9 @@ export default {
 @import "../../common/stylus/mixin.styl"
 .header
 	color:#fff
-	background-color:grey
+	position:relative
+	background-color:rgba(7,17,27,.5)
+	overflow:hidden
 .content-wrapper
 	padding:24px 12px 18px 24px
 	font-size:0
@@ -74,7 +82,7 @@ export default {
 				height:18px
 				display:inline-block
 				bg-image('brand')
-				background-size:30px 18px
+				background-size:100%
 				vertical-align: top
 				margin-right:6px
 				background-repeat:none
@@ -93,7 +101,7 @@ export default {
 				width:12px
 				height:12px
 				margin-right:4px
-				background-size:12px 12px
+				background-size:100%
 				background-repeat:none
 				vertical-align: middle
 				&.decrease		
@@ -114,7 +122,7 @@ export default {
 		height:24px
 		right:12px
 		padding:0 8px
-		bottom:18px
+		bottom:14px
 		padding:0 8px
 		border-radius: 14px
 		background: rgba(0,0,0,0.2)
@@ -125,4 +133,44 @@ export default {
 		.icon-keyboard_arrow_right
 			font-size:10px
 			margin-left:2px
+.bulletin-wrapper
+	padding:0 22px 0 12px
+	white-space:nowrap
+	overflow:hidden
+	text-overflow:ellipsis
+	background-color:rgba(7,17,27,.2)
+	line-height:28px
+	height:28px
+	position:relative
+	.bulletin-title
+		display:inline-block
+		width:22px
+		height:12px
+		background-size:100%
+		bg-image('bulletin')
+		vertical-align: middle
+	.bulletin-text
+		margin:0 4px
+		font-size:10px
+		vertical-align: middle
+	.icon-keyboard_arrow_right
+		position:absolute
+		right:12px
+		bottom:8px
+		font-size:10px
+.header-background
+	position:absolute
+	top:0
+	z-index:-1
+	width:100%
+	height:100%
+	filter:blur(10px)
+.detail
+	position:fixed
+	width:100%
+	height:100%
+	overflow:auto
+	z-index:1
+	background-color:rgba(7,17,27,.8)
+	top:0
 </style>

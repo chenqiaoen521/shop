@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="goods">
 		i am goods
 	</div>
 </template>
@@ -7,4 +7,6 @@
 export default {}
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+.goods
+	background-color:red
 </style>

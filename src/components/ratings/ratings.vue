@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="ratings">
 		i am ratings
 	</div>
 </template>
@@ -7,4 +7,8 @@
 export default {}
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+.ratings
+	width:100%
+	height:200px
+	background-color:yellow
 </style>

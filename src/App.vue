@@ -43,5 +43,4 @@ export default {
 					color:rgba(77,85,93,1)
 					&.active
 						color:rgb(240,20,20)
-					
 </style>

@@ -14,3 +14,4 @@ let app = new Vue({
   components: { App }
 })
 Vue.use(VueResource)
+

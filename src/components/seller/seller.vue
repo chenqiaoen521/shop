@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="seller">
 		i am seller
 	</div>
 </template>
@@ -7,4 +7,8 @@
 export default {}
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+.seller
+	width:100%
+	height:200px
+	background-color:green
 </style>
