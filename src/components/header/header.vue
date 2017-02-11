@@ -11,7 +11,7 @@
 				</div>
 				<div class="description">{{seller.description}}/{{seller.deliveryTime}}</div>
 				<div v-if="seller.supports" class="support">
-					<v-icon :type=seller.supports[0].type :size=1></v-icon>
+					<v-icon class="icon" :type=seller.supports[0].type :size=1></v-icon>
 					<span class="text">{{seller.supports[0].description}}</span>
 				</div>
 			</div>
