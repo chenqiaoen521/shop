@@ -11,12 +11,8 @@ const CLS_OFF = 'off'
 
 export default {
 	props: {
-		size: {
-			type: 'number'
-		},
-		score: {
-			type: 'number'
-		}
+		size: Number,
+		score: Number
 	},
 	computed: {
 		starType () {
@@ -42,6 +38,7 @@ export default {
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+@import "../../common/stylus/mixin.styl"
 .star
 	&.star-48
 		.star-item

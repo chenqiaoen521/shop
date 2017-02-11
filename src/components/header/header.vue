@@ -11,7 +11,7 @@
 				</div>
 				<div class="description">{{seller.description}}/{{seller.deliveryTime}}</div>
 				<div v-if="seller.supports" class="support">
-					<span class="icon" :class="classMap[seller.supports[0].type]"></span>
+					<v-icon :type=seller.supports[0].type :size=1></v-icon>
 					<span class="text">{{seller.supports[0].description}}</span>
 				</div>
 			</div>
@@ -21,40 +21,66 @@
 			</div>
 		</div>
 		<div class="bulletin-wrapper">
-			<span class="bulletin-title"></span><span v-if="seller.infos" class="bulletin-text">{{seller.infos.join('')}}</span><i class="icon-keyboard_arrow_right"></i>
+			<span class="bulletin-title"></span><span v-if="seller.infos" class="bulletin-text">{{seller.bulletin}}</span><i class="icon-keyboard_arrow_right"></i>
 		</div>
 		<div class="header-background">
 			<img :src="seller.avatar" alt="seller.avatar" width="100%" height="100%">
 		</div>
-		<div class="detail" v-show="detailShow">
-			<div class="detail-wrapper clearfix">
-				<div class="detail-main">
-					<h1 class="name">{{seller.name}}</h1>
+		<transition name="fadeIn">
+			<div class="detail" v-show="detailShow">
+				<div class="detail-wrapper clearfix">
+					<div class="detail-main">
+						<h1 class="name">{{seller.name}}</h1>
+						<div class="star-wrapper">
+							<v-star :size=48 :score=seller.score></v-star>
+						</div>
+						<div class="title">
+							<div class="line"></div>
+							<div class="text">优惠信息</div>
+							<div class="line"></div>
+						</div>
+						<ul class="supports" v-if="seller.supports">
+							<li v-for="item in seller.supports" class="supports-item">
+								<v-icon class="icon" :size=2 :type=item.type></v-icon>
+								<span class="text">{{item.description}}</span>
+							</li>
+						</ul>
+						<div class="title">
+							<div class="line"></div>
+							<div class="text">商家公告</div>
+							<div class="line"></div>
+						</div>
+						<div class="bulletin">
+							<p class="content">
+								{{seller.bulletin}}
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="detail-close">
+					<i class="icon-close" @click="detailShow=false" ></i>
 				</div>
 			</div>
-			<div class="detail-close">
-				<i class="icon-close" @click="detailShow=false" ></i>
-			</div>
-		</div>
+		</transition>
 	</div>
 </template>
 <script type="text/ecmascript-6">
 import star from 'components/star/star'
+import icon from 'components/icon/icon'
 const ERR_OK = 0
 export default {
 	data () {
 		return {
 			seller: {},
-			classMap: [],
 			detailShow: false
 		}
 	},
 	components: {
-		'v-star': star
+		'v-star': star,
+		'v-icon': icon
 	},
 	mounted: function () {
 		this.$nextTick(function () {
-		this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special']
 			this.$http.get('/api/seller').then(res => {
 				let result = res.body
 				if (result.errno === ERR_OK) {
@@ -117,16 +143,6 @@ export default {
 				background-size:100%
 				background-repeat:none
 				vertical-align: middle
-				&.decrease		
-					bg-image('decrease_1')
-				&.discount		
-					bg-image('discount_1')
-				&.guarantee		
-					bg-image('guarantee_1')
-				&.invoice		
-					bg-image('invoice_1')
-				&.special		
-					bg-image('special_1')
 			.text
 				font-size:10px
 				line-height:12px
@@ -178,6 +194,12 @@ export default {
 	width:100%
 	height:100%
 	filter:blur(10px)
+.fadeIn-enter-active, .fadeIn-leave-active {
+  transition: opacity .5s
+}
+.fadeIn-enter, .fadeIn-leave-active {
+  opacity: 0
+}
 .detail
 	position:fixed
 	width:100%
@@ -191,12 +213,53 @@ export default {
 		width:100%
 		.detail-main
 			margin-top:64px
-			padding-bottom:64px
+			padding:0 36px 64px 36px
 			.name
 				font-size:16px
 				font-weight:700
 				line-height:16px
 				text-align:center
+		.star-wrapper
+			text-align:center
+			height:24px
+			line-height:24px
+			margin:16px auto 0 auto
+		.title
+			display:flex
+			margin:28px auto 24px
+			.line
+				position:relative
+				flex:1
+				top:-6px
+				border-bottom:1px solid rgba(255,255,255,.2)
+			.text
+				padding:0 12px
+				font-size:14px
+				font-weight:700
+		.supports
+			.supports-item
+				padding: 0 12px
+				font-size:0
+				line-height:12px
+				margin-bottom:12px
+				&:last-child
+					margin-bottom:0
+				.icon
+					display:inline-block
+					width:16px
+					height:16px
+					margin-right:6px
+					background-size:100%
+					background-repeat:none
+					vertical-align:middle
+				.text
+					font-size:12px
+					vertical-align:middle
+		.bulletin
+			padding 0 12px
+			.content
+				font-size:12px
+				line-height:24px
 	.detail-close
 		position:relative
 		width:32px
