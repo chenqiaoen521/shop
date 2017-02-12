@@ -1,5 +1,5 @@
 <template>
-	<span class="icon" :class="classMap"></span>
+	<span :class="classMap"></span>
 </template>
 <script type="text/ecmascript-6">
 export default {
@@ -21,7 +21,7 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "../../common/stylus/mixin.styl"
-.icon
+span
 	&.decrease_1	
 		bg-image('decrease_1')
 	&.discount_1		
