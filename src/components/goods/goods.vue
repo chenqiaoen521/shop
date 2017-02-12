@@ -2,7 +2,7 @@
 	<div class="goods">
 		<div class="menu-wrapper">
 			<ul>
-				<li v-for="item in goods" class="menu-item">
+				<li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"  @click="selectMenu(index,$event)">
 					<span class="text border-1px">
 						<v-icon v-if="item.type>0" class="icon" :type=item.type  :size=3></v-icon>{{item.name}}
 					</span>
@@ -11,7 +11,7 @@
 		</div>
 		<div class="foods-wrapper">
 			<ul>
-				<li v-for="item in goods" class="foods-list">
+				<li v-for="item in goods" class="foods-list food-list-hook">
 					<h1 class="title">{{item.name}}</h1>
 					<ul>
 						<li v-for="food in item.foods" class="food-item border-1px">
@@ -35,23 +35,43 @@
 				</li>
 			</ul>
 		</div>
+		<v-cart></v-cart>
 	</div>
 </template>
 <script type="text/ecmascript-6">
 import icon from 'components/icon/icon'
 import BScroll from 'better-scroll'
+import shopcart from 'components/cart/cart'
 const ERR_OK = 0
 export default {
 	data () {
 		return {
-			goods: {}
+			goods: {},
+			listHeight: [],
+			scrollY: 0
 		}
 	},
 	components: {
-		'v-icon': icon
+		'v-icon': icon,
+		'v-cart': shopcart
 	},
 	props: {
 		seller: Object
+	},
+	computed: {
+		currentIndex () {
+			for (let i = 0; i < this.listHeight.length; i++) {
+				let height1 = this.listHeight[i]
+				let height2
+				if (i !== this.listHeight.length - 1) {
+					height2 = this.listHeight[i + 1]
+				}
+				if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+					return i
+				}
+			}
+			return 0
+		}
 	},
 	mounted: function () {
 		this.$nextTick(function () {
@@ -61,6 +81,7 @@ export default {
 					this.goods = result.data
 					this.$nextTick(() => {
 						this._initScroll()
+						this._calculateHeight()
 					})
 					}
 				}, response => {
@@ -69,9 +90,28 @@ export default {
 	},
 	methods: {
 		_initScroll () {
-			//console.log(this.$el.children[0])
-			this.menuScroll = new BScroll(this.$el.children[0], {})
-			this.foodsScroll = new BScroll(this.$el.children[1], {})
+			this.menuScroll = new BScroll(this.$el.children[0], {
+				click: true
+			})
+			this.foodsScroll = new BScroll(this.$el.children[1], {probeType: 3})
+			this.foodsScroll.on('scroll', (pos) => {
+				this.scrollY = Math.abs(Math.round(pos.y))
+			})
+		},
+		_calculateHeight () {
+			let height = 0
+			this.listHeight.push(height)
+			let foodList = this.$el.getElementsByClassName('food-list-hook')
+			for (let i = 0; i < foodList.length; i++) {
+				height += foodList[i].clientHeight
+				this.listHeight.push(height)
+			}
+		},
+		selectMenu (index, e) {
+			if (!e._constructed) return
+			let foodList = this.$el.getElementsByClassName('food-list-hook')
+			let food = foodList[index]
+			this.foodsScroll.scrollToElement(food, 300)
 		}
 	}
 }
@@ -98,6 +138,14 @@ export default {
 			text-align:center
 			vertical-align:middle	
 			border-1px(rgba(7,17,27,.1))
+			&.current
+				position:relative
+				margin-top:-1px
+				z-index:1
+				background:#fff
+				border-none()
+				.text
+					font-weight:700	
 		.text
 			display:inline-block
 			font-size:12px
