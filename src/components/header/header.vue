@@ -71,24 +71,15 @@ const ERR_OK = 0
 export default {
 	data () {
 		return {
-			seller: {},
 			detailShow: false
 		}
+	},
+	props: {
+		seller: {}
 	},
 	components: {
 		'v-star': star,
 		'v-icon': icon
-	},
-	mounted: function () {
-		this.$nextTick(function () {
-			this.$http.get('/api/seller').then(res => {
-				let result = res.body
-				if (result.errno === ERR_OK) {
-					this.seller = result.data
-					}
-				}, response => {
-			})
-		})
 	}
 }
 </script>

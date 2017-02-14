@@ -29,19 +29,23 @@
 									<span class="now">￥{{food.price}}</span>
 									<span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
 								</div>
+								<div class="cartcontrol-wrapper">
+									<v-cartcontrol :food="food"></v-cartcontrol>
+								</div>
 							</div>
 						</li>
 					</ul>
 				</li>
 			</ul>
 		</div>
-		<v-cart></v-cart>
+		<v-cart :delivery="seller.deliveryPrice" :min="seller.minPrice"></v-cart>
 	</div>
 </template>
 <script type="text/ecmascript-6">
 import icon from 'components/icon/icon'
 import BScroll from 'better-scroll'
 import shopcart from 'components/cart/cart'
+import cartcontrol from 'components/cartcontrol/cartcontrol'
 const ERR_OK = 0
 export default {
 	data () {
@@ -53,10 +57,11 @@ export default {
 	},
 	components: {
 		'v-icon': icon,
-		'v-cart': shopcart
+		'v-cart': shopcart,
+		'v-cartcontrol': cartcontrol
 	},
 	props: {
-		seller: Object
+		seller: {}
 	},
 	computed: {
 		currentIndex () {
@@ -93,7 +98,10 @@ export default {
 			this.menuScroll = new BScroll(this.$el.children[0], {
 				click: true
 			})
-			this.foodsScroll = new BScroll(this.$el.children[1], {probeType: 3})
+			this.foodsScroll = new BScroll(this.$el.children[1], {
+				probeType: 3,
+				click: true
+			})
 			this.foodsScroll.on('scroll', (pos) => {
 				this.scrollY = Math.abs(Math.round(pos.y))
 			})
@@ -219,4 +227,8 @@ export default {
 						text-decoration:line-through
 						font-size:10px
 						color:rgb(147,153,159)	
+				.cartcontrol-wrapper
+					position:absolute
+					right:0
+					bottom:8px
 </style>

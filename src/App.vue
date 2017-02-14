@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-	<v-header></v-header>
+	<v-header :seller="seller"></v-header>
     <div class="tab border-1px">
     	<div class="tab-item">
 			<router-link to="goods">商品</router-link>
@@ -12,15 +12,32 @@
     		<router-link to="seller">商家</router-link>
     	</div>
     </div>
-    <router-view></router-view>
+    <router-view :seller="seller" keep-alive></router-view>
   </div>
 </template>
 
 <script>
 import header from 'components/header/header'
+const ERR_OK = 0
 export default {
+	data () {
+		return {
+			seller: Object
+		}
+	},
 	components: {
 		'v-header': header
+	},
+	mounted: function () {
+		this.$nextTick(function () {
+			this.$http.get('/api/seller').then(res => {
+				let result = res.body
+				if (result.errno === ERR_OK) {
+					this.seller = result.data
+					}
+				}, response => {
+			})
+		})
 	}
 }
 </script>
