@@ -17,7 +17,10 @@
 		</div>
 		<div class="ball-container">
 			<div v-for="ball in balls">
-				<transition="drop" :before-enter="beforeDrop" :enter="dropping" :after-enter="afterDrop">
+				<transition name="drop" 
+				v-on:before-enter="beforeDrop"  
+				v-on:enter="dropping" 
+				v-on:after-enter="afterDrop">
 					<div v-show="ball.show" class="ball">
 						<div class="inner inner-hook"></div>
 					</div>
@@ -110,7 +113,6 @@ export default {
 		beforeDrop (el) {
 			let count = this.balls.length
 			while (count--) {
-				console.log(count)
 				let ball = this.balls[count]
 				if (ball.show) {
 					let rect = ball.el.getBoundingClientRect()
@@ -125,15 +127,16 @@ export default {
 				}
 			}
 		},
-		dropping (el) {
+		dropping (el, done) {
 			/* eslint-disable no-unused-vars */
-			let rf = el.offestHeight
+			let rf = el.offsetHeight
 			this.$nextTick(() => {
-				el.style.webkitTransform = 'translate3d(0, 0, 0)'
-				el.style.transform = 'translate3d(0, 0, 0)'
+				el.style.webkitTransform = 'translate3d(0,0,0)'
+				el.style.transform = 'translate3d(0,0,0)'
 				let inner = el.getElementsByClassName('inner-hook')[0]
-				inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-				inner.style.transform = 'translate3d(0, 0, 0)'
+				inner.style.webkitTransform = 'translate3d(0,0,0)'
+				inner.style.transform = 'translate3d(0,0,0)'
+				el.addEventListener('transitionend', done)
 			})
 		},
 		afterDrop (el) {
@@ -159,6 +162,7 @@ export default {
 			left:32px
 			bottom:22px
 			z-index:200
+			transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
 			.inner
 				width:16px
 				height:16px
