@@ -30,7 +30,7 @@
 									<span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
 								</div>
 								<div class="cartcontrol-wrapper">
-									<v-cartcontrol :food="food"></v-cartcontrol>
+									<v-cartcontrol :food="food" @add="addFood"></v-cartcontrol>
 								</div>
 							</div>
 						</li>
@@ -38,7 +38,7 @@
 				</li>
 			</ul>
 		</div>
-		<v-cart :delivery="seller.deliveryPrice" :min="seller.minPrice"></v-cart>
+		<v-cart ref="shopcart" :selectFoods="selectFoods" :delivery="seller.deliveryPrice" :min="seller.minPrice"></v-cart>
 	</div>
 </template>
 <script type="text/ecmascript-6">
@@ -50,7 +50,7 @@ const ERR_OK = 0
 export default {
 	data () {
 		return {
-			goods: {},
+			goods: [],
 			listHeight: [],
 			scrollY: 0
 		}
@@ -64,6 +64,19 @@ export default {
 		seller: {}
 	},
 	computed: {
+		selectFoods () {
+			if (this.goods.length > 0) {
+				let foods = []
+				this.goods.forEach((good) => {
+					good.foods.forEach((food) => {
+						if	(food.count) {
+							foods.push(food)
+						}
+					})
+				})
+				return foods
+			}
+		},
 		currentIndex () {
 			for (let i = 0; i < this.listHeight.length; i++) {
 				let height1 = this.listHeight[i]
@@ -78,7 +91,7 @@ export default {
 			return 0
 		}
 	},
-	mounted: function () {
+	mounted () {
 		this.$nextTick(function () {
 			this.$http.get('/api/goods').then(res => {
 				let result = res.body
@@ -87,7 +100,7 @@ export default {
 					this.$nextTick(() => {
 						this._initScroll()
 						this._calculateHeight()
-					})
+						})
 					}
 				}, response => {
 			})
@@ -120,6 +133,12 @@ export default {
 			let foodList = this.$el.getElementsByClassName('food-list-hook')
 			let food = foodList[index]
 			this.foodsScroll.scrollToElement(food, 300)
+		},
+		addFood (target) {
+			this._drop(target)
+		},
+		_drop (target) {
+			this.$refs.shopcart.drop(target)
 		}
 	}
 }
