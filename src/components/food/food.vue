@@ -16,7 +16,7 @@
 					</div>
 					<div class="price">
 						<span class="now">￥{{food.price}}</span>
-						<span class="old" v-if="food.oilPrice">{{food.oilPrice}}</span>
+						<span class="old" v-if="food.oldPrice">{{food.oldPrice}}</span>
 					</div>
 				</div>
 			</div>
@@ -74,4 +74,35 @@ export default {
 			padding:10px
 			color:#fff
 			line-height:20px
+	.content
+		.title
+			padding:18px 18px 8px
+			font-size:14px
+			font-weight:700
+			color:rgb(7,17,27)
+			line-height:14px
+		.detail
+			font-size:0
+			padding:0 18px 18px
+			color:rgb(147,153,159)
+			line-height:10px
+			.sell-count
+				font-size:10px
+				vertical-align:top
+			.rating
+				font-size:10px
+				margin-left:12px
+				vertical-align:top
+		.price
+			padding:0 18px 18px
+			.now
+				margin-right:8px
+				color:rgb(240,20,20)
+				font-size:14px
+				line-height:14px
+				font-weight:700
+			.old
+				text-decoration:line-through
+				font-size:10px
+				color:#93999f
 </style>
