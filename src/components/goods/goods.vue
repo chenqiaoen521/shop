@@ -1,5 +1,6 @@
 <template>
-	<div class="goods">
+	<div>
+		<div class="goods">
 		<div class="menu-wrapper">
 			<ul>
 				<li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"  @click="selectMenu(index,$event)">
@@ -15,11 +16,11 @@
 					<h1 class="title">{{item.name}}</h1>
 					<ul>
 						<li v-for="food in item.foods" class="food-item border-1px">
-							<div class="icon">
+							<div class="icon" @click.stop.prevent="selectFood(food)">
 								<img width=57 height=57 :src="food.icon" alt="food.name">
 							</div>
 							<div class="content">
-								<h2 class="name">{{food.name}}</h2>
+								<h2 class="name" @click.stop.prevent="selectFood(food)">{{food.name}}</h2>
 								<p v-if="food.description" class="desc">{{food.description}}</p>
 								<div class="extra">
 									<span class="count">月售{{food.sellCount}}份</span>
@@ -39,6 +40,8 @@
 			</ul>
 		</div>
 		<v-cart ref="shopcart" :selectFoods="selectFoods" :delivery="seller.deliveryPrice" :min="seller.minPrice"></v-cart>
+		</div>
+		<v-food :food="selectf" ref="food"></v-food>
 	</div>
 </template>
 <script type="text/ecmascript-6">
@@ -46,19 +49,22 @@ import icon from 'components/icon/icon'
 import BScroll from 'better-scroll'
 import shopcart from 'components/cart/cart'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
+import food from 'components/food/food'
 const ERR_OK = 0
 export default {
 	data () {
 		return {
 			goods: [],
 			listHeight: [],
-			scrollY: 0
+			scrollY: 0,
+			selectf: {}
 		}
 	},
 	components: {
 		'v-icon': icon,
 		'v-cart': shopcart,
-		'v-cartcontrol': cartcontrol
+		'v-cartcontrol': cartcontrol,
+		'v-food': food
 	},
 	props: {
 		seller: {}
@@ -108,10 +114,10 @@ export default {
 	},
 	methods: {
 		_initScroll () {
-			this.menuScroll = new BScroll(this.$el.children[0], {
+			this.menuScroll = new BScroll(this.$el.getElementsByClassName('menu-wrapper')[0], {
 				click: true
 			})
-			this.foodsScroll = new BScroll(this.$el.children[1], {
+			this.foodsScroll = new BScroll(this.$el.getElementsByClassName('foods-wrapper')[0], {
 				probeType: 3,
 				click: true
 			})
@@ -138,7 +144,14 @@ export default {
 			this._drop(target)
 		},
 		_drop (target) {
-			this.$refs.shopcart.drop(target)
+		// 体验优化，异步执行下落动画
+			this.$nextTick(() => {
+				this.$refs.shopcart.drop(target)
+			})
+		},
+		selectFood (food) {
+			this.selectf = food
+			this.$refs.food.show()
 		}
 	}
 }
@@ -150,7 +163,7 @@ export default {
 	display:flex
 	width:100%
 	top:174px
-	bottom:46px
+	bottom:48px
 	overflow:hidden
 	.menu-wrapper
 		flex: 0 0 80px

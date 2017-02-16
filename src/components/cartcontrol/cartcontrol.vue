@@ -1,10 +1,10 @@
 <template>
 	<div class="cartcontrol">
 		<transition name="move-transition">
-		<div class="cart-decrease icon-remove_circle_outline" v-if="food.count>0" @click="reduce($event)"></div>
+		<div class="cart-decrease icon-remove_circle_outline" v-if="food.count>0" @click.stop="reduce($event)"></div>
 		</transition>
 		<div class="cart-count" v-if="food.count && food.count>0">{{food.count}}</div>
-		<div class="cart-add icon-add_circle" @click="add($event)"></div>
+		<div class="cart-add icon-add_circle" @click.stop="add($event)"></div>
 	</div>
 </template>
 <script type="text/ecmascript-6">
@@ -44,6 +44,11 @@ export default {
 		padding:4px
 		font-size:24px
 		color:rgb(0,160,220)
+		&.move-transition-enter-active, &.move-transition-leave-active
+			transition: all .5s linear
+		&.move-transition-enter,&.move-transition-leave-active
+			transform: translate3d(40px,0,0) rotate(360deg)
+			opacity: 0
 	.cart-count
 		font-size:10px
 		line-height:24px
@@ -57,11 +62,4 @@ export default {
 		padding:4px
 		font-size:24px
 		color:rgb(0,160,220)
-.move-transition-enter-active 
-	transition: all .3s linear
-.move-transition-leave-active
-	transition: all .3s linear
-.move-transition-enter,.move-transition-leave-active
-	transform: translate3d(24px,0,0) rotate(180deg)
-	opacity: 0
 </style>

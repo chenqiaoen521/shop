@@ -1,8 +1,9 @@
 <template>
+	<div>
 	<div class="shopcart">
 		<div class="content">
 			<div class="content-left">
-				<div class="logo-wrapper">
+				<div class="logo-wrapper" @click.stop="toggleList">
 					<div class="logo" :class="{'high-light':totalCount>0}">
 						<span class="icon-shopping_cart"></span>
 					</div>
@@ -11,7 +12,7 @@
 				<div class="price">{{totalPrice}}</div>
 				<div class="desc">另需配送费￥{{delivery}}元</div>
 			</div>
-			<div class="content-right" :class="{'enough':enough}">
+			<div class="content-right" :class="{'enough':enough}" @click.stop="pay">
 				{{payDesc}}
 			</div>
 		</div>
@@ -27,13 +28,39 @@
 				</transition>
 			</div>
 		</div>
+		<transition name="fold-transition">
+			<div class="shopcart-list" v-show="fold">
+				<div class="list-header">
+					<h1 class="title">购物车</h1>
+					<span class="empty" @click.stop.prevent="empty">清空</span>
+				</div>
+				<div class="list-content">
+					<ul>
+						<li class="food" v-for="food in selectFoods">
+							<span class="name">{{food.name}}</span>
+							<div class="price">￥{{food.price * food.count}}</div>
+							<div class="cartcontrol-warpper">
+								<v-cartcontrol :food="food"></cartcontrol>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</transition>
+	</div>
+	<transition name="mask-transition">
+	<div class="list-mask" v-show="fold"></div>
+	</transition>
 	</div>
 </template>
 <script type="text/ecmascript-6">
+import cartcontrol from 'components/cartcontrol/cartcontrol'
+import BScroll from 'better-scroll'
 export default {
 	data () {
 		return {
 			enough: false,
+			fold: false,
 			balls: [
 				{
 					show: false
@@ -53,6 +80,9 @@ export default {
 			],
 			dropBalls: []
 		}
+	},
+	components: {
+		'v-cartcontrol': cartcontrol
 	},
 	props: {
 		delivery: {
@@ -145,17 +175,47 @@ export default {
 					ball.show = false
 					el.style.display = 'none'
 				}
+		},
+		toggleList () {
+			if (!this.totalCount) {
+				this.fold = false
+				return
+			}
+			if (this.totalCount > 0) {
+				this.fold = !this.fold
+			}
+			if (this.fold) {
+				this.$nextTick(() => {
+					let dom = this.$el.getElementsByClassName('list-content')[0]
+					if (!this.foldcroll) {
+						this.foldcroll = new BScroll(dom, {
+						click: true
+						})
+					}
+				})
+			}
+		},
+		empty () {
+			this.selectFoods.forEach((food) => {
+				food.count = 0
+			})
+			this.fold = false
+		},
+		pay () {
+			alert()
 		}
 	}
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+@import "../../common/stylus/mixin.styl"
 .shopcart
 	position:fixed
 	width:100%
 	bottom:0
 	left:0
 	height:48px
+	z-index:1
 	.ball-container
 		.ball
 			position:fixed
@@ -246,4 +306,70 @@ export default {
 			&.enough
 				background: #00b43c
 				color: #fff
+	.shopcart-list
+		background-color:#f3f5f7
+		position:absolute
+		top:0
+		width:100%
+		left:0
+		line-height:0
+		z-index:-1
+		transform: translate3d(0,-100%,0)
+		&.fold-transition-enter-active, &.fold-transition-leave-active
+			transition: all 0.5s
+		&.fold-transition-enter, &.fold-transition-leave-active
+			transform:translate3d(0,0,0)
+		.list-header
+			height:40px
+			font-size:0
+			border-1px(rgba(7,17,27,.1))
+			padding:0 18px
+			box-sizing:border-box
+			.title
+				display:inline-block
+				font-size:14px
+				color:rgb(7,17,27)
+				line-height:40px
+				float:left
+			.empty
+				display:inline-block
+				float:right
+				font-size:12px
+				color:#00a0dc
+				line-height:40px
+		.list-content	
+			max-height:217px
+			overflow:hidden
+			.food
+				position:relative
+				box-sizing:border-box
+				padding:0 18px
+				.name
+					line-height:48px
+					font-size:14px
+					color:rgb(7,17,27)
+				.price
+					position:absolute
+					font-size:10px
+					line-height:48px
+					font-weight:700
+					color:rgb(240,20,20)
+					right:90px
+					top:0
+				.cartcontrol-warpper
+					position:absolute
+					right:0
+					bottom:8px
+.list-mask
+	position:fixed
+	top:0
+	left:0
+	width:100%
+	height:100%
+	filter:blur(10px)
+	background-color:rgba(7,17,27,.8)
+	&.mask-transition-enter-active, &.mask-transition-leave-active
+		transition: all 0.5s
+	&.mask-transition-enter, &.mask-transition-leave-active
+		opacity:0	
 </style>
