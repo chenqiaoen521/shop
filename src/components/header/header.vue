@@ -2,7 +2,7 @@
 	<div class="header">
 		<div class="content-wrapper">
 			<div class="avater">
-				<img :src="seller.avatar" @click="detailShow=true" width="64" height="64" alt="seller.avatar">
+				<img :src="seller.avatar" @click="detailShow=true" width="64" height="64" :alt="seller.avatar">
 			</div>
 			<div class="content">
 				<div class="title">
@@ -24,7 +24,7 @@
 			<span class="bulletin-title"></span><span v-if="seller.infos" class="bulletin-text">{{seller.bulletin}}</span><i class="icon-keyboard_arrow_right"></i>
 		</div>
 		<div class="header-background">
-			<img :src="seller.avatar" alt="seller.avatar" width="100%" height="100%">
+			<img :src="seller.avatar" :alt="seller.avatar" width="100%" height="100%">
 		</div>
 		<transition name="fadeIn">
 			<div class="detail" v-show="detailShow">

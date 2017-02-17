@@ -17,7 +17,7 @@
 					<ul>
 						<li v-for="food in item.foods" class="food-item border-1px">
 							<div class="icon" @click.stop.prevent="selectFood(food)">
-								<img width=57 height=57 :src="food.icon" alt="food.name">
+								<img width=57 height=57 :src="food.icon" :alt="food.name">
 							</div>
 							<div class="content">
 								<h2 class="name" @click.stop.prevent="selectFood(food)">{{food.name}}</h2>
@@ -41,7 +41,7 @@
 		</div>
 		<v-cart ref="shopcart" :selectFoods="selectFoods" :delivery="seller.deliveryPrice" :min="seller.minPrice"></v-cart>
 		</div>
-		<v-food :food="selectf" ref="food"></v-food>
+		<v-food :food="selectf" @add="addFood" ref="food"></v-food>
 	</div>
 </template>
 <script type="text/ecmascript-6">
