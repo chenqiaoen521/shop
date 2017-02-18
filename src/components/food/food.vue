@@ -37,12 +37,12 @@
 						<v-ratingselect @ratingSselect="changeType"  @ratingsOnlycont=changeCont  :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></v-ratingselect>
 						<div class="rating-wrapper">
 							<ul v-show="food.ratings && food.ratings.length">
-								<li v-for="rating in food.ratings" class="rating-item border-1px">
+								<li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
 									<div class="user">
 										<span class="name">{{rating.username}}}</span>
 										<img :src="rating.avatar" width=12 height=12 :alt="rating.username" class="avatar">
 									</div>
-									<div class="time">{{rating.rateTime}}</div>
+									<div class="time">{{rating.rateTime | formatDate}}</div>
 									<p class="text">
 										<span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
 									</p>
@@ -50,17 +50,6 @@
 							</ul>
 							<div class="no-rating"  v-show="!food.ratings || !food.ratings.length">暂无评价</div>
 						</div>
-					</div>
-					
-					<div class="content">
-						<h2 class="title infos-title">商品介绍</h2>
-						<div class="infos-detail">{{food.info}}</div>
-						<v-split></v-split>
-					</div>
-					<div class="content">
-						<h2 class="title infos-title">商品介绍</h2>
-						<div class="infos-detail">{{food.info}}</div>
-						<v-split></v-split>
 					</div>
 				</div>
 			</div>
@@ -72,6 +61,7 @@ import BScroll from 'better-scroll'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
 import split from 'components/split/split'
 import ratingselect from 'components/ratingselect/ratingselect'
+import {formatDate} from 'common/js/date'
 import Vue from 'vue'
 const POSITIVE = 0
 const NEGATIVE = 1
@@ -87,6 +77,12 @@ export default {
 				positive: '推荐',
 				negative: '吐槽'
 			}
+		}
+	},
+	filters: {
+		formatDate (time) {
+			let date = new Date(time)
+			return formatDate(date, 'yyyy-MM-dd hh:mm')
 		}
 	},
 	props: {
@@ -107,6 +103,8 @@ export default {
 					this.detailScroll = new BScroll(this.$el, {
 					click: true
 					})
+				} else {
+					this.detailScroll.refresh()
 				}
 			})
 		},
@@ -122,9 +120,25 @@ export default {
 		},
 		changeType (type) {
 			this.selectType = type
+			this.$nextTick(() => {
+				this.detailScroll.refresh()
+			})
 		},
 		changeCont (flag) {
 			this.onlyContent = flag
+			this.$nextTick(() => {
+				this.detailScroll.refresh()
+			})
+		},
+		needShow (type, text) {
+			if (this.onlyContent && !text) {
+				return false
+			}
+			if (this.selectType === ALL) {
+				return true
+			} else {
+				return type === this.selectType
+			}
 		}
 	}
 }
@@ -135,7 +149,7 @@ export default {
 	position:fixed
 	left:0
 	top:0
-	bottom:0
+	bottom:48px
 	background:#fff
 	right:0
 	transform: translate3d(0,0,0)
@@ -266,4 +280,8 @@ export default {
 						color:rgb(0,160,220)
 					.icon-thumb_down
 						color:rgb(147,153,159)
+			.no-rating
+				padding:16px 0
+				font-size:12px
+				color:rgb(147,153,159)
 </style>			
