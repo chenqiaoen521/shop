@@ -114,13 +114,21 @@ export default {
 	},
 	methods: {
 		_initScroll () {
-			this.menuScroll = new BScroll(this.$el.getElementsByClassName('menu-wrapper')[0], {
+			if (!this.menuScroll) {
+				this.menuScroll = new BScroll(this.$el.getElementsByClassName('menu-wrapper')[0], {
 				click: true
-			})
-			this.foodsScroll = new BScroll(this.$el.getElementsByClassName('foods-wrapper')[0], {
+				})
+			} else {
+				this.menuScroll.refresh()
+			}
+			if (!this.foodsScroll) {
+				this.foodsScroll = new BScroll(this.$el.getElementsByClassName('foods-wrapper')[0], {
 				probeType: 3,
 				click: true
-			})
+				})
+			} else {
+				this.foodsScroll.refresh()
+			}
 			this.foodsScroll.on('scroll', (pos) => {
 				this.scrollY = Math.abs(Math.round(pos.y))
 			})

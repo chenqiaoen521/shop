@@ -88,9 +88,13 @@ export default {
 				if (result.errno === ERR_OK) {
 					this.ratings = result.data
 					this.$nextTick(() => {
-						this.ratingScroll = new BScroll(this.$el, {
+						if (!this.ratingScroll) {
+							this.ratingScroll = new BScroll(this.$el, {
 							click: true
 							})
+						} else {
+							this.ratingScroll.refresh()
+							}
 						})
 					}
 				}, response => {

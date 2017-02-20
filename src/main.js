@@ -6,6 +6,7 @@ import router from './router'
 import VueResource from 'vue-resource'
 import 'common/stylus/index.styl'
 
+Vue.use(VueResource)
 /* eslint-disable no-new */
 let app = new Vue({
   el: '#app',
@@ -13,5 +14,4 @@ let app = new Vue({
   template: '<App/>',
   components: { App }
 })
-Vue.use(VueResource)
 

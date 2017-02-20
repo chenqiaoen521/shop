@@ -12,31 +12,38 @@
     		<router-link to="seller">商家</router-link>
     	</div>
     </div>
+    <keep-alive>
     <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import header from 'components/header/header'
+//import {urlParse} from 'common/js/util'
+var util = require('common/js/util')
 const ERR_OK = 0
 export default {
 	data () {
 		return {
-			seller: Object
+			seller: {
+				id: (() => {
+				let queryParam = util.urlParse()
+				return queryParam.id
+				})()
+			}
 		}
 	},
 	components: {
 		'v-header': header
 	},
-	mounted: function () {
-		this.$nextTick(function () {
-			this.$http.get('/api/seller').then(res => {
-				let result = res.body
-				if (result.errno === ERR_OK) {
-					this.seller = result.data
-					}
-				}, response => {
-			})
+	created () {
+		this.$http.get('/api/seller?id=' + this.seller.id).then(res => {
+			let result = res.body
+			if (result.errno === ERR_OK) {
+				this.seller = Object.assign({}, this.seller, result.data)
+				}
+			}, response => {
 		})
 	}
 }
