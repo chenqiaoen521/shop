@@ -33,6 +33,7 @@ export default {
 				return queryParam.id
 				})(),
 				goodsId: 980977
+				goodsId: 9527
 			}
 		}
 	},
