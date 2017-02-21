@@ -3,13 +3,13 @@
 	<v-header :seller="seller"></v-header>
     <div class="tab border-1px">
     	<div class="tab-item">
-			<router-link to="goods">商品</router-link>
+			<router-link :to="{ name:'goods', params: { id: seller.goodsId }}">商品</router-link>
     	</div>
     	<div class="tab-item">
-    		<router-link to="ratings">评论</router-link>
+    		<router-link :to="{ name:'ratings'}">评论</router-link>
     	</div>
     	<div class="tab-item">
-    		<router-link to="seller">商家</router-link>
+    		<router-link :to="{ name:'seller'}">商家</router-link>
     	</div>
     </div>
     <keep-alive>
@@ -20,6 +20,7 @@
 
 <script>
 import header from 'components/header/header'
+import router from './router'
 //import {urlParse} from 'common/js/util'
 var util = require('common/js/util')
 const ERR_OK = 0
@@ -30,7 +31,8 @@ export default {
 				id: (() => {
 				let queryParam = util.urlParse()
 				return queryParam.id
-				})()
+				})(),
+				goodsId: 980977
 			}
 		}
 	},
@@ -42,6 +44,7 @@ export default {
 			let result = res.body
 			if (result.errno === ERR_OK) {
 				this.seller = Object.assign({}, this.seller, result.data)
+				router.push({name: 'goods', params: {id: this.seller.goodsId}})
 				}
 			}, response => {
 		})

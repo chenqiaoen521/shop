@@ -9,22 +9,18 @@ Vue.use(VueRouter)
 export default new VueRouter({
   routes: [
     {
-      path: '/',
-      redirect: '/goods'
-    },
-    {
-      path: '/goods',
-      name: 'Goods',
+      path: '/goods/:id',
+      name: 'goods',
       component: Goods
     },
     {
       path: '/ratings',
-      name: 'Ratings',
+      name: 'ratings',
       component: Ratings
     },
     {
       path: '/seller',
-      name: 'Seller',
+      name: 'seller',
       component: Seller
     }
   ],
