@@ -4,8 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueResource from 'vue-resource'
+import store from './store'
 import 'common/stylus/index.styl'
+import { sync } from 'vuex-router-sync'
 
+sync(store, router)
 Vue.use(VueResource)
 /* eslint-disable no-new */
 let app = new Vue({

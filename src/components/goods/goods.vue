@@ -99,6 +99,7 @@ export default {
 	},
 	mounted () {
 		this.$nextTick(function () {
+		console.log(this.$route.params)
 			this.$http.get('/api/goods').then(res => {
 				let result = res.body
 				if (result.errno === ERR_OK) {

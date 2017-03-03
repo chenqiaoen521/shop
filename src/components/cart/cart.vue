@@ -40,7 +40,7 @@
 							<span class="name">{{food.name}}</span>
 							<div class="price">￥{{food.price * food.count}}</div>
 							<div class="cartcontrol-warpper">
-								<v-cartcontrol :food="food"></cartcontrol>
+								<v-cartcontrol :food="food"></v-cartcontrol>
 							</div>
 						</li>
 					</ul>
