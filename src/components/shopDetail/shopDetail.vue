@@ -3,7 +3,7 @@
 	<v-header :seller="seller"></v-header>
     <div class="tab border-1px">
     	<div class="tab-item">
-			<router-link :to="{ name:'goods', params: { id: 1 }}">商品</router-link>
+			<router-link :to="{ name:'goods', params: { id: seller.goodsId }}">商品</router-link>
     	</div>
     	<div class="tab-item">
     		<router-link :to="{ name:'ratings'}">评论</router-link>
@@ -43,7 +43,7 @@ export default {
 			let result = res.body
 			if (result.errno === ERR_OK) {
 				this.seller = Object.assign({}, this.seller, result.data)
-				router.push({name: 'goods', params: {id: 1}})
+				router.push({name: 'goods', params: {id: this.seller.id}})
 				}
 			}, response => {
 		})

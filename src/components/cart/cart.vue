@@ -51,10 +51,13 @@
 	<transition name="mask-transition">
 	<div class="list-mask" v-show="fold"></div>
 	</transition>
+
+	<v-order ref="order"></v-order>
 	</div>
 </template>
 <script type="text/ecmascript-6">
 import cartcontrol from 'components/cartcontrol/cartcontrol'
+import order from 'components/order/order'
 import BScroll from 'better-scroll'
 export default {
 	data () {
@@ -82,7 +85,8 @@ export default {
 		}
 	},
 	components: {
-		'v-cartcontrol': cartcontrol
+		'v-cartcontrol': cartcontrol,
+		'v-order': order
 	},
 	props: {
 		delivery: {
@@ -202,7 +206,9 @@ export default {
 			this.fold = false
 		},
 		pay () {
-			alert()
+			this.$nextTick(() => {
+				this.$refs.order.show()
+			})
 		}
 	}
 }
