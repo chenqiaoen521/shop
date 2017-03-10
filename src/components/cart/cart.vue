@@ -206,9 +206,9 @@ export default {
 			this.fold = false
 		},
 		pay () {
-			this.$nextTick(() => {
+			if (this.enough) {
 				this.$refs.order.show()
-			})
+			}
 		}
 	}
 }

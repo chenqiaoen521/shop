@@ -1,8 +1,8 @@
 <template>
 <transition name="orderMask">
-	<div v-show="showFlag">
+	<div v-show="showFlag" class="order">
 		<!--ftop开始-->
-		<div class="ftop"> <a class="back" onClick="javascript:history.back(-1);"><img src="./icon_015.png"></a>
+		<div class="ftop"> <a class="back" @click="showFlag=false"><img src="./icon_015.png"></a>
 		  <h2>确认订单</h2>
 		  <a class="comea">&nbsp;</a>
 		  <div style="clear: both;"></div>
@@ -49,7 +49,7 @@ export default {
 			showFlag: false
 		}
 	},
-	method: {
+	methods: {
 		show () {
 			this.showFlag = !this.showFlag
 		}
@@ -58,27 +58,31 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "../../common/stylus/mixin.styl"
-.orderMask-enter-active, .orderMask-leave-active
+.order
+	position: fixed
+	top:0
+	left:0
+	right:0
+	bottom:0
+	background:#f5f5f5
 	transform:translate3d(0,0,0)
-	transition: transform .5s 'ease-in-out'
-.orderMask-enter, .orderMask-leave-active
-	transform:translate3d(100%,0,0) 
+	z-index:2
+	&.orderMask-enter-active, &.orderMask-leave-active
+		transition: all 0.5s ease-in-out
+	&.orderMask-enter, &.orderMask-leave-active
+		transform:translate3d(100%,0,0)
 .ftop
+	position:relative
 	height:46px
 	line-height:40px
 	background-color:#258ec7
 	padding 3px 10px
-	position:fixed
 	width:100%
-	left:0px
-	top:0px
-	z-index:9
 	.back
 		display:block
 		position:absolute
 		left:10px
 		top:4px
-		z-index:2
 		img
 			display:block
 			width:15px
@@ -101,9 +105,9 @@ export default {
 		position:absolute
 		right:10px
 		top:3px
-		z-index:5
 		&.fs 
 			font-size:13px
+
 .scan
 	overflow:hidden
 	position:absolute
@@ -140,7 +144,7 @@ export default {
 				display:block
 				font-size:16px
 				color:#258ec7
-@media(max-width:360px) 
+@media only screen and (max-device-width:360px) 
 	.foot_icon .swiper-slide
 		overflow:hidden
 		width:65% !important
@@ -153,14 +157,23 @@ export default {
 		margin-top:10px
 		padding-left:45px
 		background-size:26px auto
-.address 
+.address
+	line-height:18px;
+	background-image:url(./dengfukuan_07.png)
+	background-repeat:no-repeat
+	background-position:15px center
+	background-color:#fff
+	padding:10px 15px
+	margin-top:10px
+	padding-left:45px
+	background-size:26px auto
 	h2 
 		overflow:hidden
 		font-size:16px
-		span 
-			float:left
-		i 
-			float:right
+	span 
+		float:left
+	i 
+		float:right
 	p 
 		color:#999999
 		font-size:14px
@@ -173,6 +186,7 @@ export default {
 		background-size:12px auto
 .goods_list 
 	margin-top:10px
+	line-height:22px;
 	& > h2 
 		background-color:#fff
 		padding:10px 15px
