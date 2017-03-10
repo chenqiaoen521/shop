@@ -1,6 +1,7 @@
 <template>
 <transition name="orderMask">
 	<div v-show="showFlag" class="order">
+		<div>
 		<!--ftop开始-->
 		<div class="ftop"> <a class="back" @click="showFlag=false"><img src="./icon_015.png"></a>
 		  <h2>确认订单</h2>
@@ -8,7 +9,7 @@
 		  <div style="clear: both;"></div>
 		</div>
 		<!--ftop开始--> 
-		<div class="address">
+		<div class="address" >
 		  <div>
 		    <h2><span>收货人: 王名扬</span><i>13201562356</i></h2>
 		    <p>收货地址：河南省郑州市金水区中州大道与商都路交叉口建业五栋大楼</p>
@@ -17,41 +18,88 @@
 		<div class="goods_list">
 		   <h2>商品清单</h2>
 		   <ul>
-		      <li><a href="product_xq.html"><img src="./img_07.jpg">
-		          <div><p>型订书机-办公设备-订书机型订书机-办公设备-订书机</p><span>规格：普通</span>
-		          <h3><span>¥90.00</span><i>x1</i></h3></div>
-		      </a></li>
-		      <li><a href="product_xq.html"><img src="./img_09.jpg">
-		          <div><p>型订书机-办公设备-订书机型订书机-办公设备-订书机</p><span>规格：普通</span>
-		          <h3><span>¥90.00</span><i>x1</i></h3></div>
-		      </a></li>
+		      <li v-for="food in selectFoods"><a href="product_xq.html"><img :src="food.image">
+		          <div><p>{{food.name}}</p><span>{{food.description}}</span>
+		          <h3><span>¥{{food.price}}</span><i>x{{food.count}}</i></h3></div>
+		          <div class="extra">
+			          <span class="count">月售{{food.sellCount}}份</span>
+					  <span class="praise">好评率{{food.rating}}%</span>
+		          </div>
+		      	</a>
+		      </li>
 		   </ul>
 		</div>
 		<div class="delivery">
-		 <span>配送费</span><p>免邮费/快递费<i>￥15</i></p>
+		 <span>配送费</span>
+		 <p>快递费<i>￥{{deliveryPrice}}</i></p>
 		</div>
 		<div class="message">
 		  <textarea rows="2" placeholder="您对订单有什么特殊说明，可以在此备注"></textarea>
 		</div>
-		<p class="sunm">共<i>2</i>件商品，合计：<i>￥285</i>(含快递费)</p>
+		<p class="sunm">共<i>{{foodCount}}</i>件商品，合计：<i>￥{{total}}</i>(含快递费)</p>
 		<div class="amount">
 			<a href="pay_order.html">提交订单</a>
+		</div>
 		</div>
 	</div>
 </transition>
 </template>
 
 <script type="text/ecmascript-6">
-
+import BScroll from 'better-scroll'
 export default {
 	data () {
 		return {
 			showFlag: false
 		}
 	},
+	computed: {
+		total () {
+			return this.totalPrice + this.deliveryPrice
+		},
+		foodCount () {
+			let count = 0
+			for (let i in this.selectFoods) {
+				count += this.selectFoods[i].count
+			}
+			return count
+		}
+	},
+	watch: {
+		'selectFoods' () {
+			if (this.orderScroll) {
+				this.orderScroll.refresh()
+			}
+		}
+	},
+	props: {
+		selectFoods: {
+			type: Array,
+			default () {
+				return []
+			}
+		},
+		deliveryPrice: {
+			type: Number,
+			default: 0
+		},
+		totalPrice: {
+			type: Number,
+			default: 0
+		}
+	},
 	methods: {
 		show () {
 			this.showFlag = !this.showFlag
+			this.$nextTick(function () {
+			if (!this.orderScroll) {
+				this.orderScroll = new BScroll(this.$el, {
+					click: true
+				})
+			} else {
+				this.orderScroll.refresh()
+			}
+		})
 		}
 	}
 }
@@ -67,6 +115,7 @@ export default {
 	background:#f5f5f5
 	transform:translate3d(0,0,0)
 	z-index:2
+	voerflow:hidden
 	&.orderMask-enter-active, &.orderMask-leave-active
 		transition: all 0.5s ease-in-out
 	&.orderMask-enter, &.orderMask-leave-active
@@ -196,15 +245,27 @@ export default {
 		li 
 			position:relative
 			border-top:1px solid #d9d9d9
-			padding:15px
-			min-height:110px
+			padding:1px 15px
+			min-height:100px
 			padding-left:110px
+			.extra
+					font-size:0
+					color:rgb(147,153,159)
+					line-height:10px
+					margin:8px 0
+					.count
+						display:inline
+						font-size:10px
+						margin-right:12px
+					.praise
+						display:inline
+						font-size:10px
 			a 
 				img 
 					position:absolute
 					display:block
 					left:15px
-					top:15px
+					top:10px
 					width:80px
 					height:80px
 					overflow:hidden
@@ -212,6 +273,7 @@ export default {
 					border:1px solid #e5e5e5
 			div 
 				p 
+					margin-top:5px
 					font-size:15px
 					color:#000
 				& > span 
@@ -286,9 +348,6 @@ export default {
 .amount 
 	height:45px
 	background-color:#fff
-	position:fixed
-	left:0px
-	bottom:0px
 	width:100%
 	a 
 		height:45px

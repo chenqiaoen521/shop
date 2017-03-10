@@ -52,7 +52,7 @@
 	<div class="list-mask" v-show="fold"></div>
 	</transition>
 
-	<v-order ref="order"></v-order>
+	<v-order ref="order" :selectFoods="selectFoods" :deliveryPrice="delivery" :totalPrice="totalPrice"></v-order>
 	</div>
 </template>
 <script type="text/ecmascript-6">
