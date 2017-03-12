@@ -98,6 +98,7 @@ export default {
 		}
 	},
 	mounted () {
+		console.log('goods')
 		this.$nextTick(function () {
 		console.log(this.$route.params)
 			this.$http.get('/api/goods').then(res => {
