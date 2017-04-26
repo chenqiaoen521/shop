@@ -28,7 +28,25 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        options : {
+            configure:{
+                target: 'https://mainsite-restapi.ele.me',
+                changeOrigin: true,
+            },
+            filter:[
+            '/shopping',
+            '/ugc',
+            '/v1',
+            '/v2',
+            '/v3',
+            '/v4',
+            '/bos',
+            '/member',
+            '/promotion',
+            '/eus',],
+        },
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

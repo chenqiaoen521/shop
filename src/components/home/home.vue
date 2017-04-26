@@ -13,7 +13,9 @@
 const ERR_OK = 0
 export default {
 	created () {
-		console.log('by create')
+		this.$http.get('/v1/cities').then((data) => {
+			console.log(data)
+		})
 	}
 }
 </script>

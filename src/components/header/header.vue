@@ -9,10 +9,10 @@
 					<span class="brand"></span>
 					<span class="name" @click="detailShow=true">{{seller.name}}</span>
 				</div>
-				<div class="description">{{seller.description}}/{{seller.deliveryTime}}</div>
+				<div class="description" @click="goto">{{seller.description}}/{{seller.deliveryTime}}</div>
 				<div v-if="seller.supports" class="support">
 					<v-icon class="icon" :type=seller.supports[0].type :size=1></v-icon>
-					<span class="text">{{seller.supports[0].description}}</span>
+					<span class="text" >{{seller.supports[0].description}}</span>
 				</div>
 			</div>
 			<div v-if="seller.supports" class="support-count">
@@ -67,6 +67,7 @@
 <script type="text/ecmascript-6">
 import star from 'components/star/star'
 import icon from 'components/icon/icon'
+import store from '../../store'
 const ERR_OK = 0
 export default {
 	data () {
@@ -80,6 +81,11 @@ export default {
 	components: {
 		'v-star': star,
 		'v-icon': icon
+	},
+	methods: {
+		goto () {
+			console.log(store)
+		}
 	}
 }
 </script>

@@ -21,7 +21,7 @@
 							</div>
 							<div class="content">
 								<h2 class="name" @click.stop.prevent="selectFood(food)">{{food.name}}</h2>
-								<p v-if="food.description" class="desc">{{food.description}}</p>
+								<p v-if="food.description" class="desc" >{{food.description}}</p>
 								<div class="extra">
 									<span class="count">月售{{food.sellCount}}份</span>
 									<span class="praise">好评率{{food.rating}}%</span>
