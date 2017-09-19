@@ -75,7 +75,7 @@ export default {
 				let foods = []
 				this.goods.forEach((good) => {
 					good.foods.forEach((food) => {
-						if	(food.count) {
+						if (food.count) {
 							foods.push(food)
 						}
 					})
